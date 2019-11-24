@@ -20,10 +20,10 @@ function makeSpring(n=nBuildings, params={damping:.1, stiffness:.05}) {
 }
 
 const springSet = [
-	makeSpring(nBuildings/U, {damping:.6, stiffness:.1}),
-	makeSpring(nBuildings/U, {damping:.8, stiffness:.2}),
+	makeSpring(nBuildings/U, {damping:.6, stiffness:.05}),
+	makeSpring(nBuildings/U, {damping:.8, stiffness:.4}),
 	makeSpring(nBuildings/U, {damping:.7, stiffness:.1}),
-	makeSpring(nBuildings/U, {damping:.9, stiffness:.2}),
+	makeSpring(nBuildings/U, {damping:.4, stiffness:.2}),
 	makeSpring(nBuildings/U, {damping:.4, stiffness:.1}),
 ];
 

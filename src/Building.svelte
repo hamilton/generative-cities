@@ -2,23 +2,33 @@
 import Grass from './Grass.svelte';
 import { getContext } from 'svelte';
 import { makePoints } from './coords.js'
+import { shuffle } from 'd3-array';
 export let x;
 export let y;
 export let buildingHeight;
 export let patio = 8;
-const tileSize = getContext('tileSize', tileSize);
-const width = getContext('width', width);
-const height = getContext('height', height);
-const tileDimensions = getContext('tileDimensions', tileDimensions);
+const tileSize = getContext('tileSize');
+const width = getContext('width');
+const height = getContext('height');
+const tileDimensions = getContext('tileDimensions');
+const coords = getContext('coords')
+
+const orientation = shuffle(['left', 'right', 'top', 'bottom', 'center']);
 
 const H = height / 2 / tileDimensions;
 const W = width / 2 / tileDimensions;
-const points = makePoints(height, W, H);
+//const points = makePoints(height, W, H);
 
-const coords = points(x,y);
+const placement = coords(x,y);
 let BH = buildingHeight * H;
 $: BH = buildingHeight * H;
-const leftSide = (obj, BH) => `${obj.lx + patio},${obj.ly} ${obj.lx + patio},${obj.ly - BH} ${obj.tx},${obj.by  - BH - patio/2} ${obj.bx},${obj.by - patio / 2}`
+
+const leftSide = (obj, BH) => `
+${obj.lx + patio},${obj.ly} 
+${obj.lx + patio},${obj.ly - BH} 
+${obj.tx},${obj.by  - BH - patio/2} 
+${obj.bx},${obj.by - patio / 2}`
+
 const rightSide = (obj, BH) => `${obj.bx},${obj.by - patio /2} ${obj.rx - patio},${obj.ry} ${obj.rx - patio},${obj.ly  - BH} ${obj.tx},${obj.by - BH - patio/2}`
 const topSide = (obj, BH) => `${obj.lx + patio},${obj.ly - BH} ${obj.tx},${obj.ty - BH + patio/2} ${obj.rx - patio},${obj.ry - BH} ${obj.bx},${obj.by - BH - patio/2}`;
 
@@ -58,7 +68,7 @@ polygon {
 </style>
 
 <g class=s01>
-    <polygon class=left points={leftSide(coords, BH)} fill=url(#left)  />
-    <polygon class=right points={rightSide(coords, BH)} fill="url(#right)" />
-    <polygon class=top points={topSide(coords, BH)} fill="url(#top)" />
+    <polygon class=left points={leftSide(placement, BH)} fill=url(#left)  />
+    <polygon class=right points={rightSide(placement, BH)} fill="url(#right)" />
+    <polygon class=top points={topSide(placement, BH)} fill="url(#top)" />
 </g>

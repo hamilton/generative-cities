@@ -18,7 +18,7 @@ const W = width / 2 / tileDimensions;
 
 const points = makePoints(height, W, H);
 
-const endTween = tweened(start, {duration: 1000, easing});
+const endTween = tweened(start, {duration: 400, easing});
 $: endTween.set(end);
 
 const st = points(...start)
@@ -29,7 +29,7 @@ const toCoord = (a,b) => `
     ${b.rx - W * pad},${b.ry + H * pad / 2} 
     ${b.bx + W * pad},${b.by - H * pad / 2}`
 
-const l = tweened({x: st.lx + W / 2, y: st.ty + H / 4}, { duration: 1000, easing, delay: 1000});
+const l = tweened({x: st.lx + W / 2, y: st.ty + H / 4}, { duration: 400, easing, delay: 400});
 
 $: l.set({
     x:  en.rx - W / 2,
@@ -47,7 +47,7 @@ onMount(() => {
     <polygon points={toCoord(st, points(...$endTween))} fill=#6b4265 />
     {#if mounted}
         <line
-            in:fade={{duration:1000, delay: 1000}}
+            in:fade={{duration:400, delay: 400}}
             x1={st.lx + W / 2}
             x2={$l.x}
             y1={st.ty + H / 4}
