@@ -11,6 +11,7 @@ import Building from './Building.svelte';
 import Earth from './Earth.svelte';
 
 let grid = false;
+let radians = Math.random();
 
 
 const width = 1400;
@@ -18,8 +19,6 @@ const height = width / 2;
 const rows = 25;
 const tileSize = width / rows / 2;
 
-//const nBuildings = Math.pow(rows, 2);
-//const rows = Math.floor(width / tileSize / 2);
 let P = .1;
 let U = 5;
 
@@ -46,7 +45,7 @@ if (buildings.length % 5 !== 0) buildings = buildings.slice(0, buildings.length 
 const nBuildings = buildings.length;
 
 const r = (n=nBuildings) => Array.from({length: n}).map(() => 
-	({h: Math.random() * 2 + tileSize / rows / 3, b:  3 + Math.random() * (tileSize / 1.5)})
+	({h: Math.random() + tileSize / rows / 2, b:  .2 + Math.random() / 2})
 );
 
 function makeSpring(n=nBuildings, params={damping:.1, stiffness:.05}) {
@@ -73,10 +72,8 @@ const sprs = derived(springSet, $springs => {
 	return reorder.map(r=> out[r]);
 })
 
-
-// setInterval(() => {
-// 	springSet.forEach(s=>{ s.set(r(nBuildings/U))});
-// }, 750)
+let d = (n=nBuildings) => Array.from({length: n}).map(() => Math.random() * Math.PI / 8);
+let degrees = spring(d(), {damping: .6, stiffness: .1});
 
 let mounted = false;
 
@@ -111,7 +108,17 @@ div {
 	</label>
 	<button on:click={()=>{
 		springSet.forEach(s=>{ s.set(r(nBuildings/U))});
-	}}>randomize</button>
+		degrees.set(d());
+
+	}}>resize</button>
+
+	<!-- <button on:click={()=>{
+			degrees.set(d());
+		}}>resize</button> -->
+
+	<input type="range" bind:value={radians} 
+	min={0} max={1} step={.01}>
+	{radians}
 </div>
 
 {#if mounted}
@@ -123,7 +130,7 @@ div {
 			<Road start={[0, 5]} end={[rows-1, 5]} />
 			{#each buildings as {kind, x, y, side}, i}
 				{#if kind === 'building'}
-					<Building x={x} y={y} buildingHeight={$sprs[i].h} patio={$sprs[i].b} doorSide={side} />
+					<Building x={x} y={y} buildingHeight={$sprs[i].h} buffer={$sprs[i].b} doorSide={side} angle={$degrees[i] * radians} />
 				{:else if kind === 'tree'}
 					<Grass x={x} y={y} trunkHeight={$sprs[i].h} />
 				{/if}

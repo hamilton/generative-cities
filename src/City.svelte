@@ -11,24 +11,28 @@ export let grid = true;
 
 let tileDimensions = width / tileSize / 2;	
 
-let H = width / 2 / tileDimensions;
+let H = width / 4 / tileDimensions;
 let W = width / 2 / tileDimensions;
 
-const coords = (cx, cy) => {
+const coords = (cx, cy, h=0) => {
 	return {
-		lx: cx * W + cy * W,
-		ly: margin + width / 4 + cx * (H / 2) - cy * (H / 2),
-		tx: cx * W + cy * W + W,
-		ty: margin + width / 4 + cx * (H / 2) - cy * (H / 2) - H / 2,
-		rx: cx * W + cy * W + W * 2,
-		ry: margin + width / 4 + cx * (H / 2) - cy * (H / 2),
-		bx: cx * W + cy * W + W,
-		by: margin + width / 4 + cx * (H / 2) - cy * (H / 2) - H / 2 + H
+		lx: cx * W + cy * W                                       ,//- h * W / (Math.sqrt(3)) / 4,
+		ly: margin + width / 4 + cx * (H) - cy * (H)              - h,
+		tx: cx * W + cy * W + W                                   ,//- h * W / (Math.sqrt(3)) / 4,
+		ty: margin + width / 4 + cx * (H) - cy * (H) - H          - h,
+		rx: cx * W + cy * W + W * 2                               ,//- h * W / (Math.sqrt(3)) / 4,
+		ry: margin + width / 4 + cx * (H) - cy * (H)              - h,
+		bx: cx * W + cy * W + W                                   ,//- h * W / (Math.sqrt(3)) / 4,
+		by: margin + width / 4 + cx * (H) - cy * (H) - H + H * 2  - h,
 	}
 }
 
-const scale = (cx, cy) => {
-	return [cx * W + cy * W, margin + width / 4 + cx * (H / 2) - cy * (H / 2)]
+const scale = (cx, cy, h = 0) => {
+	const obj = coords(cx, cy)
+	// return [
+	// 	cx * W + cy * W, 
+	// 	margin + width / 4 + cx * (H) - cy * (H) - h]
+	return [obj.lx, obj.ly];
 }
 
 setContext('tileSize', tileSize);
@@ -55,18 +59,30 @@ setContext('margin', margin);
 		<linearGradient id="right" x1="0" x2="1" y1="0" y2="1">
 			<stop class="stop1" offset="0%" stop-color=#875580 />
 			<stop class="stop3" offset="100%" stop-color=#2f4858 />
+		</linearGradient>
+		<linearGradient id="right-back" x1="1" x2="1" y1="0" y2="1">
+				<stop class="stop1" offset="0%" stop-color=#7e4f77 />
+				<stop class="stop3" offset="100%" stop-color=#2f4858 />
 			</linearGradient>
+
 			<linearGradient id="left" x1="0" x2="0" y1="0" y2="1">
 			<stop class="stop1" offset="0%" stop-color=#d65db1 />
 			<stop class="stop1" offset="30%" stop-color=#d65db1 />
 			<stop class="stop3" offset="100%" stop-color=#60547d />
 		</linearGradient>
-		<linearGradient id="shadow" x1="0" x2="1" y1="0" y2="1">
-				<stop class="stop1" offset="0%" stop-color=rgba(0,0,0,.2) />
-				<stop class="stop3" offset="50%" stop-color=rgba(0,0,0,.025) />
-				<stop class="stop3" offset="70%" stop-color=rgba(0,0,0,.01) />
+
+		<!-- <linearGradient id="shadow" x1="0" x2="1" y1="0" y2="1">
+				<stop class="stop1" offset="0%" stop-color=rgba(0,0,0,.3) />
+				<stop class="stop3" offset="50%" stop-color=rgba(0,0,0,.15) />
+				<stop class="stop3" offset="70%" stop-color=rgba(0,0,0,.05) />
 				<stop class="stop3" offset="100%" stop-color=rgba(0,0,0,0) />
+		</linearGradient> -->
+
+		<linearGradient id="shadow" x1="0" x2="1" y1="0" y2="1">
+				<stop class="stop1" offset="0%" stop-color=rgba(0,0,0,.075) />
+				<stop class="stop3" offset="100%" stop-color=rgba(0,0,0,.05) />
 		</linearGradient>
+
 		<radialGradient id="treetop" cx="20%" cy="20%" r="50%" fx="20%" fy="20%">
 				<stop offset="10%" stop-color="#3a1e48" />
 				<stop offset="95%" stop-color="#2e183a" />

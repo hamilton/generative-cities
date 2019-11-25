@@ -1,9 +1,10 @@
 <script>
 import { getContext } from 'svelte';
-
+import { line, curveCatmullRomOpen } from 'd3-shape';
 export let coords = getContext('coords');
 export let tileDimensions = getContext('tileDimensions');
 export let margin = getContext('margin');
+export let scale = getContext('scale');
 
 const toString = (l,t,r,b) => `
 ${l.lx},${l.ly} 
@@ -15,6 +16,18 @@ const left = coords(0,0);
 const top = coords(0, tileDimensions-1);
 const right = coords(tileDimensions-1, tileDimensions-1);
 const bottom = coords(tileDimensions-1, 0);
+
+const r = () => {
+    let v = 0;
+    return Array.from({length: tileDimensions * 2}).map(() => {
+        v += Math.random();
+        return scale(v + Math.random(), v + Math.random());
+    })
+}
+
+const path = (vs) => vs.map(([x,y],i) => i === 0 ? `M ${x} ${y}` : `L ${x} ${y}`).join(' ')
+
+const l = line().curve(curveCatmullRomOpen)
 
 </script>
 
@@ -49,4 +62,10 @@ const bottom = coords(tileDimensions-1, 0);
         bottom, 
         )} fill=url(#right) opacity=.3
     />
+    <!-- <path 
+        d={l(r())}
+        stroke=white
+        fill=none
+        opacity=.1
+    /> -->
 </g>
