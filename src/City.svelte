@@ -6,7 +6,7 @@ import { fly } from 'svelte/transition';
 import { cubicOut as easing } from 'svelte/easing';
 export let width = 500;
 export let tileSize = 25;
-export let margin = 50;
+export let margin = 100;
 export let grid = true;
 
 let tileDimensions = width / tileSize / 2;	

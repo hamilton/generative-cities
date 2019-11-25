@@ -12,6 +12,7 @@ import Earth from './Earth.svelte';
 
 let grid = false;
 let radians = Math.random();
+let heightMultiplier = 1;
 
 
 const width = 1400;
@@ -19,7 +20,7 @@ const height = width / 2;
 const rows = 25;
 const tileSize = width / rows / 2;
 
-let P = .1;
+let P = .3;
 let U = 5;
 
 
@@ -93,7 +94,7 @@ div {
 }
 
 .controls {
-	display: fixed;
+	position: fixed;
 	left: 16px;
 	top: 16px;
 	width: max-content;
@@ -119,6 +120,10 @@ div {
 	<input type="range" bind:value={radians} 
 	min={0} max={1} step={.01}>
 	{radians}
+
+	<input type="range" bind:value={heightMultiplier} 
+	min={1} max={10} step={.01}>
+	{heightMultiplier}
 </div>
 
 {#if mounted}
@@ -130,7 +135,7 @@ div {
 			<Road start={[0, 5]} end={[rows-1, 5]} />
 			{#each buildings as {kind, x, y, side}, i}
 				{#if kind === 'building'}
-					<Building x={x} y={y} buildingHeight={$sprs[i].h} buffer={$sprs[i].b} doorSide={side} angle={$degrees[i] * radians} />
+					<Building x={x} y={y} buildingHeight={$sprs[i].h * heightMultiplier} buffer={$sprs[i].b} doorSide={side} angle={$degrees[i] * radians} />
 				{:else if kind === 'tree'}
 					<Grass x={x} y={y} trunkHeight={$sprs[i].h} />
 				{/if}
