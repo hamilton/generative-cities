@@ -1,101 +1,133 @@
 <script>
 import { spring } from 'svelte/motion';
 import { derived } from 'svelte/store';
-import { shuffle } from 'd3-array'
+import { shuffle } from 'd3-array';
+import { fly } from 'svelte/transition';
+import { onMount } from 'svelte';
 import City from './City.svelte';
 import Grass from './Grass.svelte';
 import Road from './Road.svelte';
 import Building from './Building.svelte';
+import Earth from './Earth.svelte';
 
-const nBuildings = 100;
-const rows = 16;
-let P = .5;
+let grid = false;
+
+
+const width = 1400;
+const height = width / 2;
+const rows = 25;
+const tileSize = width / rows / 2;
+
+//const nBuildings = Math.pow(rows, 2);
+//const rows = Math.floor(width / tileSize / 2);
+let P = .1;
 let U = 5;
 
-const r = (n=nBuildings) => Array.from({length: n}).map(() => Math.random() * 2 + .2);
-const ww = (n=nBuildings) => Array.from({length:n}).map(() => 4 + Math.random() * 12);
 
-function makeSpring(n=nBuildings, params={damping:.1, stiffness:.05}) {
-	return spring(Array.from({length: n}).fill(0), params);
+const sortByView = ({x: ax,y: ay},{x: bx, y: by}) => {
+	if ((ax <= bx) && (ay >= by)) return -1;
+	return 1;
 }
 
+let buildings = Array.from({length: Math.pow(rows, 2)}).fill(null).map((_,i) => {
+	const x = i % rows;
+	const y = Math.floor(i / rows);
+	const side = Math.random() > .5 ? 'left' : 'right';
+	if (y === 5) return undefined;
+	if (Math.random() < P) {
+		return {x, y, side, kind: 'building'}
+	}
+	if (Math.random() < .1) return {x, y, kind: 'tree'}
+	return undefined;
+}).filter((x)=> x !== undefined)
+
+buildings.sort(sortByView);
+if (buildings.length % 5 !== 0) buildings = buildings.slice(0, buildings.length - (buildings.length % 5));
+const nBuildings = buildings.length;
+
+const r = (n=nBuildings) => Array.from({length: n}).map(() => 
+	({h: Math.random() * 2 + tileSize / rows / 3, b:  3 + Math.random() * (tileSize / 1.5)})
+);
+
+function makeSpring(n=nBuildings, params={damping:.1, stiffness:.05}) {
+	return spring(Array.from({length: n}).fill({h:1, b: 1}), params);
+}
+const seg = nBuildings / U;
+
 const springSet = [
-	makeSpring(nBuildings/U, {damping:.6, stiffness:.05}),
-	makeSpring(nBuildings/U, {damping:.8, stiffness:.4}),
-	makeSpring(nBuildings/U, {damping:.7, stiffness:.1}),
-	makeSpring(nBuildings/U, {damping:.4, stiffness:.2}),
-	makeSpring(nBuildings/U, {damping:.4, stiffness:.1}),
+	makeSpring(seg, {damping:.6, stiffness:.3}),
+	makeSpring(seg, {damping:.8, stiffness:.4}),
+	makeSpring(seg, {damping:.7, stiffness:.3}),
+	makeSpring(seg, {damping:.6, stiffness:.2}),
+	makeSpring(seg, {damping:.45, stiffness:.1}),
 ];
 
 const widthSet = makeSpring(nBuildings, { damping: .9, stiffness:.1});
 
 const reorder = shuffle(Array.from({length: nBuildings}).map((_,i) => i));
+
 $: springSet.forEach(s=>{ s.set(r(nBuildings/U))});
-$: widthSet.set(ww(nBuildings))
+
 const sprs = derived(springSet, $springs => {
 	const out = $springs.flat();
 	return reorder.map(r=> out[r]);
 })
 
-const buildingLocations = () => {
-	const spots = Array.from({length: nBuildings});
-	const g = () => {
-		const x = Math.floor(Math.random() * 16);
-		const y = Math.floor(Math.random() * 16);
-		return [x,y]
-	}
-	let pairs = [];
-	const locs = spots.map((_,i) => {
-		// generate pair;
-		let [x,y] = g();
-		while (pairs.includes(`${x},${y}`)) {
-			[x,y] = g();
-		}
-		pairs.push(`${x},${y}`)
-		return [x,y]
-	})
-	return locs;
-}
 
-const sortByView = ([ax,ay],[bx,by]) => {
-	if ((ax <= bx) && (ay >= by)) return -1;
-	return 1;
-}
-const buildings = buildingLocations();
-buildings.sort(sortByView);
+// setInterval(() => {
+// 	springSet.forEach(s=>{ s.set(r(nBuildings/U))});
+// }, 750)
 
-//let tempBuildings = Array.from({length:nBuildings}).map((_,i) => [i % 16, Math.floor(i / 16)]);
-let tempBuildings = Array.from({length: rows * rows}).map((_,i) => {
-	const x = i % 16;
-	const y = Math.floor(i / 16);
-	if (y === 5) return undefined;
-	if (Math.random() < P) return [x,y]
-	return undefined;
-}).filter((x)=> x !== undefined)
-tempBuildings.sort(sortByView);
+let mounted = false;
 
-setInterval(() => {
-	springSet.forEach(s=>{ s.set(r(nBuildings/U))});
-	widthSet.set(ww(nBuildings));
-}, 1000)
+onMount(() => {
+	mounted = true;
+})
+
 
 </script>
 
 <style>
+
 div {
 	display: grid;
 	align-items: center;
 	justify-items: center;
 }
+
+.controls {
+	display: fixed;
+	left: 16px;
+	top: 16px;
+	width: max-content;
+	color: white;
+}
 </style>
 
-<div>
-	<City width={800} height={800}>
-		<!-- {#each Array.from({length: rows}).fill(null) as _, i} -->
-			<Road start={[0,5]} end={[rows-1,5]} />
-		<!-- {/each} -->
-		{#each tempBuildings as [x,y], i}
-			<Building x={x} y={y} buildingHeight={$sprs[i]} patio={$widthSet[i]} />
-		{/each}
-	</City>
+<div class=controls>
+	<label>
+		grid
+		<input type=checkbox bind:checked={grid} />
+	</label>
+	<button on:click={()=>{
+		springSet.forEach(s=>{ s.set(r(nBuildings/U))});
+	}}>randomize</button>
 </div>
+
+{#if mounted}
+	<div in:fly={{duration: 300, y:-10}}>
+		<City width={width} tileSize={tileSize}  grid={grid}>
+			<g slot='earth'>
+				<Earth />
+			</g>
+			<Road start={[0, 5]} end={[rows-1, 5]} />
+			{#each buildings as {kind, x, y, side}, i}
+				{#if kind === 'building'}
+					<Building x={x} y={y} buildingHeight={$sprs[i].h} patio={$sprs[i].b} doorSide={side} />
+				{:else if kind === 'tree'}
+					<Grass x={x} y={y} trunkHeight={$sprs[i].h} />
+				{/if}
+			{/each}
+		</City>
+	</div>
+{/if}

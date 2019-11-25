@@ -65,3 +65,9 @@ button:focus {
 svg {
 	margin: auto;
 }
+
+button {
+	background: none;
+	color: white;
+	border-radius: 8px;
+}
