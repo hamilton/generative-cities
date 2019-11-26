@@ -1,3 +1,29 @@
+:root {
+	/* spacing system */
+	--column-dp: 8px;
+
+	--space-1q: calc(var(--space-base) / 4);
+	--space-1h: calc(var(--space-base) / 2);
+	--space-base: var(--column-dp);
+	--space-2x: calc(var(--space-base) * 2);
+	--space-3x: calc(var(--space-base) * 3);
+	--space-4x: calc(var(--space-base) * 4);
+	--space-6x: calc(var(--space-base) * 6);
+	--space-8x: calc(var(--space-base) * 8);
+	--space-12x: calc(var(--space-base) * 12);
+	--space-16x: calc(var(--space-base) * 16);
+	--space-20x: calc(var(--space-base) * 20);
+	--space-24x: calc(var(--space-base) * 24);
+	--space-32x: calc(var(--space-base) * 32);
+	--space-40x: calc(var(--space-base) * 40);
+	--space-48x: calc(var(--space-base) * 48);
+	--space-72x: calc(var(--space-base) * 72);
+	--space-81x: calc(var(--space-base) * 81);
+	--space-96x: calc(var(--space-base) * 96);
+
+	--increment: var(--space-6x); /* eg. 48dp. */
+}
+
 html, body {
 	position: relative;
 	width: 100%;

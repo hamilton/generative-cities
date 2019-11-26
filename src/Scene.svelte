@@ -28,11 +28,18 @@ const coords = (cx, cy, h=0) => {
 }
 
 const scale = (cx, cy, h = 0) => {
-	const obj = coords(cx, cy)
+	const obj = coords(cx, cy, h)
 	// return [
 	// 	cx * W + cy * W, 
 	// 	margin + width / 4 + cx * (H) - cy * (H) - h]
 	return [obj.lx, obj.ly];
+}
+
+const rotate = (x, y, rad, centroid = [0,0]) => {
+    const k = 2;
+    const x1 = (x - centroid[0]) * Math.cos(rad) - (y - centroid[1]) * Math.sin(rad) * k;
+    const y1 = ((x - centroid[0]) / k) * Math.sin(rad) + (y-centroid[1]) * Math.cos(rad);
+    return [x1 + centroid[0], y1 + centroid[1]];
 }
 
 setContext('tileSize', tileSize);
@@ -42,15 +49,22 @@ setContext('tileDimensions', tileDimensions);
 setContext('coords', coords);
 setContext('scale', scale);
 setContext('margin', margin);
-// how to draw these lines?	
+setContext('rotate', rotate);
 
 </script>
 
 <style>
 
+svg {
+	position: fixed;
+	top:0;
+}
+
 </style>
 
-<svg width={width} height={width / 2 + margin * 2}>
+<svg
+	in:fly={{duration:200, y: 10}}
+	width={width} height={width / 2 + margin * 2}>
 	<defs>
 		<linearGradient id="top" x1="0" x2="1" y1="0" y2="1">
 		<stop class="stop1" offset="0%" stop-color=#c25e5e />
@@ -71,16 +85,9 @@ setContext('margin', margin);
 			<stop class="stop3" offset="100%" stop-color=#60547d />
 		</linearGradient>
 
-		<!-- <linearGradient id="shadow" x1="0" x2="1" y1="0" y2="1">
-				<stop class="stop1" offset="0%" stop-color=rgba(0,0,0,.3) />
-				<stop class="stop3" offset="50%" stop-color=rgba(0,0,0,.15) />
-				<stop class="stop3" offset="70%" stop-color=rgba(0,0,0,.05) />
-				<stop class="stop3" offset="100%" stop-color=rgba(0,0,0,0) />
-		</linearGradient> -->
-
 		<linearGradient id="shadow" x1="0" x2="1" y1="0" y2="1">
-				<stop class="stop1" offset="0%" stop-color=rgba(0,0,0,.075) />
-				<stop class="stop3" offset="100%" stop-color=rgba(0,0,0,.05) />
+				<stop class="stop1" offset="0%" stop-color=rgba(0,0,0,.095) />
+				<stop class="stop3" offset="100%" stop-color=rgba(0,0,0,.07) />
 		</linearGradient>
 
 		<radialGradient id="treetop" cx="20%" cy="20%" r="50%" fx="20%" fy="20%">
@@ -90,7 +97,7 @@ setContext('margin', margin);
 	</defs>
 	<slot name='earth'></slot>
 	{#if grid}
-		<g transition:fly={{duration: 200, y: -2, easing}}>
+		<g in:fly={{duration: 200, y: -2, easing}}>
 			{#each Array.from({length:tileDimensions+1}).fill(null) as _,i }
 				<line 
 					x1={coords(i,0).lx}
