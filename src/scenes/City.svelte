@@ -93,11 +93,7 @@ onMount(() => {
 
 <style>
 
-div {
-    display: grid;
-    align-items: center;
-    justify-items: center;
-}
+
 
 .controls {
     position: fixed;
@@ -108,36 +104,7 @@ div {
 }
 </style>
 
-<div class=controls>
-    <label>
-        grid
-        <input type=checkbox bind:checked={grid} />
-    </label>
-    <label>
-        windows
-        <input type=checkbox bind:checked={windows} />
-    </label>
-    <button on:click={()=>{
-        springSet.forEach(s=>{ s.set(r(nBuildings/U))});
-        degrees.set(d());
-
-    }}>resize</button>
-
-    <!-- <button on:click={()=>{
-            degrees.set(d());
-        }}>resize</button> -->
-
-    <input type="range" bind:value={radians} 
-    min={0} max={1} step={.01}>
-    {radians}
-
-    <input type="range" bind:value={heightMultiplier} 
-    min={1} max={5} step={.01}>
-    {heightMultiplier}
-</div>
-
 {#if mounted}
-    <div>
         <Scene width={width} tileSize={tileSize} grid={grid}>
             <g slot='earth'>
                 <Earth />
@@ -158,5 +125,28 @@ div {
                 {/if}
             {/each}
         </Scene>
-    </div>
 {/if}
+
+<div class=controls>
+    <label>
+        grid
+        <input type=checkbox bind:checked={grid} />
+    </label>
+    <label>
+        windows
+        <input type=checkbox bind:checked={windows} />
+    </label>
+    <button on:click={()=>{
+        springSet.forEach(s=>{ s.set(r(nBuildings/U))});
+        degrees.set(d());
+
+    }}>resize</button>
+
+    <input type="range" bind:value={radians} 
+    min={0} max={1} step={.01}>
+    {radians}
+
+    <input type="range" bind:value={heightMultiplier} 
+    min={1} max={2.5} step={.01}>
+    {heightMultiplier}
+</div>

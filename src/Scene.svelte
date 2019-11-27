@@ -54,7 +54,11 @@ setContext('rotate', rotate);
 </script>
 
 <style>
-
+div {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
 svg {
 	position: fixed;
 	top:0;
@@ -62,59 +66,61 @@ svg {
 
 </style>
 
-<svg
-	in:fly={{duration:200, y: 10}}
-	width={width} height={width / 2 + margin * 2}>
-	<defs>
-		<linearGradient id="top" x1="0" x2="1" y1="0" y2="1">
-		<stop class="stop1" offset="0%" stop-color=#c25e5e />
-		<stop class="stop3" offset="100%" stop-color=#60547d />
-		</linearGradient>
-		<linearGradient id="right" x1="0" x2="1" y1="0" y2="1">
-			<stop class="stop1" offset="0%" stop-color=#875580 />
-			<stop class="stop3" offset="100%" stop-color=#2f4858 />
-		</linearGradient>
-		<linearGradient id="right-back" x1="1" x2="1" y1="0" y2="1">
-				<stop class="stop1" offset="0%" stop-color=#7e4f77 />
+<div>
+	<svg
+		in:fly={{duration:200, y: 10}}
+		width={width} height={width / 2 + margin * 2}>
+		<defs>
+			<linearGradient id="top" x1="0" x2="1" y1="0" y2="1">
+			<stop class="stop1" offset="0%" stop-color=#c25e5e />
+			<stop class="stop3" offset="100%" stop-color=#60547d />
+			</linearGradient>
+			<linearGradient id="right" x1="0" x2="1" y1="0" y2="1">
+				<stop class="stop1" offset="0%" stop-color=#875580 />
 				<stop class="stop3" offset="100%" stop-color=#2f4858 />
 			</linearGradient>
+			<linearGradient id="right-back" x1="1" x2="1" y1="0" y2="1">
+					<stop class="stop1" offset="0%" stop-color=#7e4f77 />
+					<stop class="stop3" offset="100%" stop-color=#2f4858 />
+				</linearGradient>
 
-			<linearGradient id="left" x1="0" x2="0" y1="0" y2="1">
-			<stop class="stop1" offset="0%" stop-color=#d65db1 />
-			<stop class="stop1" offset="30%" stop-color=#d65db1 />
-			<stop class="stop3" offset="100%" stop-color=#60547d />
-		</linearGradient>
+				<linearGradient id="left" x1="0" x2="0" y1="0" y2="1">
+				<stop class="stop1" offset="0%" stop-color=#d65db1 />
+				<stop class="stop1" offset="30%" stop-color=#d65db1 />
+				<stop class="stop3" offset="100%" stop-color=#60547d />
+			</linearGradient>
 
-		<linearGradient id="shadow" x1="0" x2="1" y1="0" y2="1">
-				<stop class="stop1" offset="0%" stop-color=rgba(0,0,0,.095) />
-				<stop class="stop3" offset="100%" stop-color=rgba(0,0,0,.07) />
-		</linearGradient>
+			<linearGradient id="shadow" x1="0" x2="1" y1="0" y2="1">
+					<stop class="stop1" offset="0%" stop-color=rgba(0,0,0,.095) />
+					<stop class="stop3" offset="100%" stop-color=rgba(0,0,0,.07) />
+			</linearGradient>
 
-		<radialGradient id="treetop" cx="20%" cy="20%" r="50%" fx="20%" fy="20%">
-				<stop offset="10%" stop-color="#3a1e48" />
-				<stop offset="95%" stop-color="#2e183a" />
-		</radialGradient>
-	</defs>
-	<slot name='earth'></slot>
-	{#if grid}
-		<g in:fly={{duration: 200, y: -2, easing}}>
-			{#each Array.from({length:tileDimensions+1}).fill(null) as _,i }
-				<line 
-					x1={coords(i,0).lx}
-					x2={coords(i, tileDimensions).lx}
-					y1={coords(i, 0).ly}
-					y2={coords(i, tileDimensions).ry}
-					stroke=gray
-				/>
-				<line 
-					x1={coords(0,i).lx}
-					x2={coords(tileDimensions, i).lx}
-					y1={coords(0, i).ly}
-					y2={coords(tileDimensions, i).ry}
-					stroke=gray
-				/>
-			{/each}
-		</g>
-	{/if}
-	<slot></slot>
-</svg>
+			<radialGradient id="treetop" cx="20%" cy="20%" r="50%" fx="20%" fy="20%">
+					<stop offset="10%" stop-color="#3a1e48" />
+					<stop offset="95%" stop-color="#2e183a" />
+			</radialGradient>
+		</defs>
+		<slot name='earth'></slot>
+		{#if grid}
+			<g in:fly={{duration: 200, y: -2, easing}}>
+				{#each Array.from({length:tileDimensions+1}).fill(null) as _,i }
+					<line 
+						x1={coords(i,0).lx}
+						x2={coords(i, tileDimensions).lx}
+						y1={coords(i, 0).ly}
+						y2={coords(i, tileDimensions).ry}
+						stroke=gray
+					/>
+					<line 
+						x1={coords(0,i).lx}
+						x2={coords(tileDimensions, i).lx}
+						y1={coords(0, i).ly}
+						y2={coords(tileDimensions, i).ry}
+						stroke=gray
+					/>
+				{/each}
+			</g>
+		{/if}
+		<slot></slot>
+	</svg>
+</div>
