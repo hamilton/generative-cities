@@ -1,11 +1,14 @@
 <script>
-import City from './scenes/City.svelte';
+import Bouncing from './scenes/Bouncing.svelte';
 import Heights from './scenes/Heights.svelte';
+import Hamlet from './scenes/Hamlet.svelte';
 
-let which = 1;
+let which = 0;
 const scenes = [
-	{name: 'Hamlet', component: City},
-	{name: 'Heights', component: Heights},
+  { name: 'Hamlet', component: Hamlet },
+  { name: 'Heights', component: Heights },
+  { name: 'Bouncing', component: Bouncing },
+
 ];
 
 </script>
@@ -17,25 +20,13 @@ h1 {
 	margin-bottom: var(--space-2x);
 	font-family: 'Seraphs Var';
 	font-variation-settings: 'wght' 100, 'SRFS' 6;
+	line-height:1;
 }
 
 h1 sub {
 	color: tomato;
 	font-size:.6em;
 	font-variation-settings: 'wght' 200, 'SRFS' 6;
-}
-
-.scene-controls {
-	position: fixed;
-	right:0;
-	top:0;
-	color: white;
-	padding: var(--space-2x);
-	width: max-content;
-}
-
-.scene-controls label {
-	width: var(--space-16x);
 }
 </style>
 
@@ -46,8 +37,8 @@ h1 sub {
 {/each}
 
 
-<div class='scene-controls'>
-	<h1>isomap<sub>α</sub></h1>
+<div class='scene-selection'>
+	<h1>isometric map</h1>
 	{#each scenes as {name, component}, i}
 	<label>
 		<input type=radio bind:group={which} value={i}>

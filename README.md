@@ -1,93 +1,15 @@
-*Psst �looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+# Isomap
 
----
+This is a Thanksgiving-2019-break experiment to see if I could build a library that converts xyz coordinates to an isometric plane using just Svelte, SVG and math.
 
-# svelte app
+Well, it works. Naturally, it starts to break down pretty quickly with enough svg objects, especially if you animate them (which, OF COURSE we want to animate them)
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
+I suppose one nice aspect of this experiment is that I can easily copy the outer HTML of the svg, paste those results to a new file, then open them in  llustrator / an illustrator-like program.
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
+This repository has primitives (Scene, Polygon, Circle), composites (Earth, Box), and three small scenes in it:
 
-```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
-```
+- Hamlet – a small town of boxy homes. The boxes rotate, and they cast shadows. Some care was taken to keeping the shadows from looking weird, but I didn't really spend the time to have shadows cast on the buildings.
+- Heights – the big city floating high above all the hamlets. The render starts to get pretty heavy.
+- Bouncing – bouncing flat disks. Shows how the xyz components map to isometric space.
 
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
-
-
-## Get started
-
-Install the dependencies...
-
-```bash
-cd svelte-app
-npm install
-```
-
-...then start [Rollup](https://rollupjs.org):
-
-```bash
-npm run dev
-```
-
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
-
-By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
-
-
-## Building and running in production mode
-
-To create an optimised version of the app:
-
-```bash
-npm run build
-```
-
-You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
-
-
-## Single-page app mode
-
-By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
-
-If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
-
-```js
-"start": "sirv public --single"
-```
-
-
-## Deploying to the web
-
-### With [now](https://zeit.co/now)
-
-Install `now` if you haven't already:
-
-```bash
-npm install -g now
-```
-
-Then, from within your project folder:
-
-```bash
-cd public
-now deploy --name my-project
-```
-
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public my-project.surge.sh
-```
+I will not be pursuing this approach any further, since it seems clear that it's time to go WebGL. PRs welcome if they improve performance in a Svelte-y way.
