@@ -4,42 +4,13 @@
 	font-display: swap;
 	font-style: normal;
 	font-named-instance: 'Regular';
-	src: url("/fonts/seraphs/SeraphsVAR-v3.woff2") format("woff2");
+	src: url("fonts/seraphs/SeraphsVAR-v3.woff2") format("woff2");
   }
-  
 
 @font-face {
 font-family: 'ISO';
-src: url('/fonts/iso/ISOv0.6-Black.woff') format('woff');
-font-weight: 900;
-font-style: normal;
-}
-
-@font-face {
-font-family: 'ISO';
-src: url('/fonts/iso/ISOv0.6-Bold.woff') format('woff');
-font-weight: bold;
-font-style: normal;
-}
-
-@font-face {
-font-family: 'ISO';
-src: url('/fonts/iso/ISOv0.6-Medium.woff') format('woff');
-font-weight: medium;
-font-style: normal;
-}
-
-@font-face {
-font-family: 'ISO';
-src: url('/fonts/iso/ISOv0.6-Regular.woff') format('woff');
+src: url('fonts/iso/ISOv0.6-Regular.woff') format('woff');
 font-weight: 400;
-font-style: normal;
-}
-
-@font-face {
-font-family: 'ISO';
-src: url('/fonts/iso/ISOv0.6-Thin.woff') format('woff');
-font-weight: 300;
 font-style: normal;
 }
 
