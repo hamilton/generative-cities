@@ -1,6 +1,6 @@
 <script>
-import { tweened } from 'svelte/motion';
-import { cubicOut, bounceIn } from 'svelte/easing';
+import { tweened, spring } from 'svelte/motion';
+import { cubicOut } from 'svelte/easing';
 import Scene from '../primitives/Scene.svelte';
 import Earth from '../composites/Earth.svelte';
 import Box from '../composites/Box.svelte';
@@ -31,9 +31,9 @@ const k = 0.3;
 
 const randomizeArrayElement = (x, y, i, K = k) => {
   const rx = 0.1 + Math.random() / 4;
-  const ry = rx;// K +  Math.random() / 2;
-  const rxw = rx * 2; // K +  Math.random() / 2;
-  const ryw = rxw; // K +  Math.random() / 2;
+  const ry = rx;
+  const rxw = rx * 2;
+  const ryw = rxw;
   const rz = K + Math.random();
   const ra = K + Math.random();
   return [x, y, rx, ry, 1 - rxw, 1 - ryw, rz, ra];
@@ -47,18 +47,15 @@ const makeArray = (p = P) => Array.from({ length: rows * rows }).fill(null).map(
 }).filter((v) => v !== undefined);
 
 const homes = makeArray();
+
 homes.sort(sortByView);
-const homesStore = tweened(homes, { duration: T, easing: cubicOut });
+
+const homesStore = spring(homes);
 
 $: homesStore.update((h) => h.map(([x, y], i) => randomizeArrayElement(x, y, i)));
 
-let angle = 0;// tweened(0, { duration: 500, easing: cubicOut });
+let angle = 0;
 let overallHeight = 0;
-
-// setInterval(() => {
-//   angle.update((a) => (a === 0 ? Math.PI / 4 : 0));
-//   homesStore.update((h) => h.map(([x, y], i) => randomizeArrayElement(x, y, i)));
-// }, 1000);
 
 </script>
 
