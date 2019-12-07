@@ -2,8 +2,8 @@
   "version": 3,
   "file": "bundle.css",
   "sources": [
-    "../../src/App.svelte",
-    "../../src/primitives/Scene.svelte"
+    "../src/App.svelte",
+    "../src/primitives/Scene.svelte"
   ],
   "sourcesContent": [
     "<script>\nimport Bouncing from './scenes/Bouncing.svelte';\nimport Heights from './scenes/Heights.svelte';\nimport Hamlet from './scenes/Hamlet.svelte';\n\nlet which = 0;\nconst scenes = [\n  { name: 'Hamlet', component: Hamlet },\n  { name: 'Heights', component: Heights },\n  { name: 'Bouncing', component: Bouncing },\n\n];\n\n</script>\n\n<style>\n\nh1 {\n\tmargin: 0;\n\tmargin-bottom: var(--space-2x);\n\tfont-family: 'Seraphs Var';\n\tfont-variation-settings: 'wght' 100, 'SRFS' 6;\n\tline-height:1;\n}\n\nh1 sub {\n\tcolor: tomato;\n\tfont-size:.6em;\n\tfont-variation-settings: 'wght' 200, 'SRFS' 6;\n}\n</style>\n\n{#each scenes as {name, component}, i}\n\t{#if i === which}\n\t\t<svelte:component this={scenes[which].component} />\n\t{/if}\n{/each}\n\n\n<div class='scene-selection'>\n\t<h1>isometric map</h1>\n\t{#each scenes as {name, component}, i}\n\t<label>\n\t\t<input type=radio bind:group={which} value={i}>\n\t\t{name}\n\t</label>\n\t{/each}\n</div>",
